@@ -9,36 +9,36 @@ module.exports = function solveSudoku(matrix) {
 
 
   	function getColumn(matrix, indexColumn) {
-  		var col = matrix.map(row => row[indexColumn])
+  		const col = matrix.map(row => row[indexColumn]);
   		return col;
   	}
 
 
   	function getSquare(matrix, coords) {
-  		var startRow = Math.trunc(coords.row / 3) * 3,
-  				startCol = Math.trunc(coords.col / 3) * 3,
-  				square = [];
+  		const startRow = Math.trunc(coords.row / 3) * 3,
+            startCol = Math.trunc(coords.col / 3) * 3;
+      let square = [];
 
-  				for (let i = startRow; i < startRow + 3; i++) {
-  					for (let j = startCol; j < startCol + 3; j++) {
-  						square.push(matrix[i][j]);
-  					}
-  				}
+      for (let i = startRow; i < startRow + 3; i++) {
+       for (let j = startCol; j < startCol + 3; j++) {
+        square.push(matrix[i][j]);
+        }
+      }
 
-  				return square;
-  	}
+      return square;
+    }
 
-  	let row = getRow(matrix, coords.row);
-  	if (row.indexOf(number) == -1) {
-  		let col = getColumn(matrix, coords.col);
-  			if (col.indexOf(number) == -1) {
-  				let square = getSquare(matrix, coords);
-  				if (square.indexOf(number) == -1) {
-  					return true;
-  				}
-  			}
-  		}
-  	
+
+    const row = getRow(matrix, coords.row);
+    if (row.indexOf(number) == -1) {
+      const col = getColumn(matrix, coords.col);
+      if (col.indexOf(number) == -1) {
+        const square = getSquare(matrix, coords);
+        if (square.indexOf(number) == -1) {
+         return true;
+       }
+     }
+    }
 
   	return false;
   }
@@ -63,23 +63,19 @@ module.exports = function solveSudoku(matrix) {
   	
 
   	let isSolved,
-  			i = 1;
+        newSudo = JSON.parse(JSON.stringify(sudo));
+    const zero = {
+          row: zeroes[0].row,
+          col: zeroes[0].col
+        },
+          newZeroes = zeroes.slice(1);
 
-  	while (i <= 9) {	
- 
-  		if (canInsert(sudo, zeroes[0], i)) {
-  			let newSudo = JSON.parse(JSON.stringify(sudo)),
-  					newZeroes = zeroes.slice();
-
-				newSudo[zeroes[0].row][zeroes[0].col] = i;
-  			newZeroes.shift();
-
+  	for (let i = 1; i <= 9; i++) {	
+  		if (canInsert(sudo, zero, i)) {
+				newSudo[zero.row][zero.col] = i;
 	  		let isSolved = solveSudo(newSudo, newZeroes);
 	  		if (isSolved) return isSolved;
   		}
-
-  		i++;
-
   	}
 
   	return false;
@@ -87,6 +83,5 @@ module.exports = function solveSudoku(matrix) {
   }
 
   return solveSudo(matrix, zeroesCoords)
-
 }
 
